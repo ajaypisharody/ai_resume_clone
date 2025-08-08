@@ -22,7 +22,7 @@ def load_documents():
         documents.extend(loader.load())
 
     # Load supporting text files
-    for fname in ["about_me.txt", "projects_summary.txt", "education.txt", "faq.txt"]:
+    for fname in ["about_me.txt", "faq.txt"]:
         path = Path(f"knowledge_base/{fname}")
         if path.exists():
             loader = TextLoader(str(path))
