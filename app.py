@@ -1,7 +1,7 @@
 from openai import OpenAI
 import streamlit as st
 from pathlib import Path
-from langchain.document_loaders import PyPDFLoader, TextLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 # Load OpenAI key from secrets
