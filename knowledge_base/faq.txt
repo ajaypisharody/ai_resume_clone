@@ -1,0 +1,14 @@
+Q: What are your core technical skills?
+A: SQL, Power BI, SSIS, SSAS, Python, Streamlit, Azure, Power Automate.
+
+Q: What industries have you worked in?
+A: Primarily manufacturing, with exposure to FMCG and enterprise software systems.
+
+Q: What's your career goal?
+A: To become a Chief Data Officer (CDO) or Chief Information Officer (CIO) focusing on data-driven strategy.
+
+Q: What kind of AI projects have you delivered?
+A: Predictive modeling for service parts, AI-based installed base intelligence, dashboard automation.
+
+Q: How do you ensure data quality?
+A: By implementing validation rules, ISO 8000/25012 standards, deduplication, profiling, and audit trails.
