@@ -1,24 +1,53 @@
 from openai import OpenAI
 import streamlit as st
 from pathlib import Path
+from langchain.document_loaders import PyPDFLoader, TextLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-client = OpenAI(api_key=st.secrets["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"])
+# Load OpenAI key from secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.set_page_config(page_title="AI Resume Chatbot", page_icon="🤖")
-st.title("🤖 Ask My AI Clone")
-st.markdown("This bot answers questions based on my resume, projects, and skills.")
+st.title("🤖 Ask My AI Resume Clone")
+st.markdown("Ask me anything about my professional or educational background.")
 
-about_me_file = Path("knowledge_base/about_me.txt")
-context = about_me_file.read_text() if about_me_file.exists() else ""
+# === Load documents from knowledge_base/ ===
+def load_documents():
+    documents = []
 
-user_input = st.text_input("Ask a question:")
+    # Load resume.pdf
+    resume_path = Path("knowledge_base/resume.pdf")
+    if resume_path.exists():
+        loader = PyPDFLoader(str(resume_path))
+        documents.extend(loader.load())
+
+    # Load supporting text files
+    for fname in ["about_me.txt", "projects_summary.txt", "education.txt", "faq.txt"]:
+        path = Path(f"knowledge_base/{fname}")
+        if path.exists():
+            loader = TextLoader(str(path))
+            documents.extend(loader.load())
+
+    return documents
+
+# Load & split documents into chunks
+documents = load_documents()
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+chunks = text_splitter.split_documents(documents)
+context = "\n\n".join([chunk.page_content for chunk in chunks[:10]])  # Limit to avoid overload
+
+# === Chat UI ===
+user_input = st.text_input("💬 Ask a question:")
 
 if user_input:
     with st.spinner("Thinking..."):
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": f"You are a helpful AI assistant that answers questions about Ajay's professional background. Here is some context:\n\n{context}"},
+                {
+                    "role": "system",
+                    "content": f"You are Ajay's AI assistant. Use the following resume and background context to answer like Ajay:\n\n{context}"
+                },
                 {"role": "user", "content": user_input}
             ]
         )
